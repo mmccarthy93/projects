@@ -1,0 +1,25 @@
+'''
+The purpose of this program is to determine how many tries it will take to randomly
+generate your name out of a string of random characters of the same length as your 
+name where each letter is randomly generated and compared to that letter in your
+name.
+'''
+
+import random, string
+
+name = input("Please enter your name: ")
+name = name.lower()
+name_length = len(name)
+i = 0
+counter = 1
+
+while i == 0:
+  rand_name = ""
+  for x in range(0, name_length):  
+    rand_name = rand_name + random.choice(string.ascii_lowercase)   
+  if rand_name == name:
+    print("it took " + str(counter) + " tries to randomly generate the name " 
+         + name + ".")
+    i += 1
+  else:
+    counter += 1
