@@ -26,7 +26,7 @@ chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s --
 #chrome_path = 'open -a /Applications/Google\ Chrome.app %s --incognito'
 
 def edx_login():
-    payload = {'email': 'mccarthy.michael2021@gmail.com', 'password': 'Bal1s0ng'}
+    payload = {'email': 'email', 'password': 'password'}
 
     r1 = requests.get(edx, data=payload)
 
@@ -43,8 +43,8 @@ def edx_login():
 def edx_login2():
     web = Browser(edx_login())
     web.go_to('https://courses.edx.org/login')
-    web.type('mccarthy.michael2021@gmail.com', into='email')
-    web.type('Bal1s0ng', into='password')
+    web.type('email', into='email')
+    web.type('password', into='password')
     web.click('Sign in')
 
 
