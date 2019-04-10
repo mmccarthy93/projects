@@ -1,0 +1,25 @@
+"""The purpose of this program is to automate the opening and the logging in of multiple websites onto separate tabs
+within incognito mode of google chrome."""
+
+import webbrowser
+
+
+links = [
+'www.gmail.com',
+'https://courses.edx.org/login',
+'https://www.reddit.com/login/',
+'https://github.com/login',
+]
+
+#Windows Chrome file path
+chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s --incognito'
+
+#MacOS Chrome file path
+#chrome_path = 'open -a /Applications/Google\ Chrome.app %s --incognito'
+
+#Windows Firefox file path
+firefox = 'C:/Program Files (x86)/Mozilla Firefox/firefox.exe %s --private'
+
+for i in range(len(links)):
+  webbrowser.get(chrome_path).open_new_tab(links[i])
+
