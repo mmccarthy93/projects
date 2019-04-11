@@ -2,50 +2,49 @@
 within incognito mode of google chrome."""
 
 import webbrowser
-import requests
-from webbot import Browser
-global web
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
+def login():
 
-links = [
-'www.gmail.com',
-'https://courses.edx.org/login',
-'https://www.reddit.com/login/',
-'https://github.com/login',
-]
+    # Set Chrome to open in incognito mode and stay open
+    chrome_options  = webdriver.ChromeOptions()
+    chrome_options.add_argument("--incognito")
+    chrome_options.add_experimental_option("detach", True)
 
-gmail = links[0]
-edx = links[1]
-reddit = links[2]
-github = links[3]
+    # Open Chrome, navigate to reddit.com, and login
+    browser = webdriver.Chrome(options=chrome_options)
+    browser.get('https://www.reddit.com/login')
+    time.sleep(2)
+    reddit_username = browser.find_element_by_id("loginUsername")
+    reddit_password = browser.find_element_by_id("loginPassword")
+    reddit_username.send_keys("TheRealGreenArrow420")
+    reddit_password.send_keys("B@l1$0ng")
+    login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
+    login_attempt.submit()
 
-#Windows Chrome file path
-chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s --incognito'
+    # Open gmail in a new tab, login to gmail
+    window_one = browser.window_handles[0]
+    browser.execute_script("window.open()")
+    window_two = browser.window_handles[1]
+    browser.switch_to.window(window_two)
+    browser.get('https://www.gmail.com')
+    time.sleep(2)
+    gmail_username = browser.find_element_by_id("identifierId")
+    gmail_username.send_keys("mccarthy.michael2021@gmail.com")
+    nextButton = browser.find_element_by_id('identifierNext')
+    nextButton.click()
+    browser.implicitly_wait(8)
+    WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, "//input[@type='password']")))
+    WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.XPATH, "//input[@type='password']")))
 
-#MacOS Chrome file path
-#chrome_path = 'open -a /Applications/Google\ Chrome.app %s --incognito'
+    gmail_password = browser.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/form/content/section/div/content/div[1]/div/div[1]/div/div[1]/input")
+    gmail_password.send_keys("bal1s0ng")
+    nextButton = browser.find_element_by_id('passwordNext')
+    nextButton.click()
 
-def edx_login():
-    payload = {'email': 'email', 'password': 'password'}
-
-    r1 = requests.get(edx, data=payload)
-
-    header ={'X-CSRFToken': r1.headers['Set-Cookie'].split('=')[1].split(';')[0],
-     'Referer': 'https://www.edx.org',
-     'X-Requested-With': 'XMLHttpRequest'}
-
-
-    r2 = requests.post(edx, data=payload, cookies=r1.cookies, headers = header)
-    print(r2.content)
-
-    webbrowser.get(chrome_path).open_new_tab(r2.url)
-
-def edx_login2():
-    web = Browser(edx_login())
-    web.go_to('https://courses.edx.org/login')
-    web.type('email', into='email')
-    web.type('password', into='password')
-    web.click('Sign in')
-
-
-edx_login()
+login()
